@@ -1,0 +1,17 @@
+1. What will be output from the code below and why?
+var b = “foo”;
+(function () {
+  var a = b = “bar”;
+})();
+console.log(b);
+
+The resulting output will be "bar".  Since the variable b is defined outside of the
+function and also called outside of the function, it would be logical to assume that the
+result of the console.log would be "foo".  However, in this instance, JavaScript reads
+var a = b = "bar" as:
+  var a = b;
+  b = "bar";
+rather than, maybe intuitively:
+  var a = b; // undefined
+  var b = "bar";
+Given this reality, b becomes a global variable without the var designation as at the top declaration of b and therefore overrides the "foo" with "bar" as the output.
