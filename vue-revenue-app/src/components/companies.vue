@@ -1,33 +1,36 @@
 <template>
   <div class="companies">
-    <h1>Revenue for Companies in Different Industries</h1>
+    <h1>Company Revenue by Industry</h1>
     <p>Add New Information</p>
     <div class="add-company">
-      <input type="text" name="" v-model="comname" placeholder="Company Name">
-      <input type="text" name="" v-model="industry" placeholder="Industry">
-      <input type="text" name="" v-model="year" placeholder="Year">
-      <input type="text" name="" v-model="revenue" placeholder="Revenue">
+      <select><option v-model="comname" v-for="company in companies">{{ company.name }}</option>
+      </select>
+      <input type="text" v-model="industry" placeholder="Industry">
+      <input type="text" v-model="year" placeholder="Year">
+      <input type="text" v-model="revenue" placeholder="Revenue">
       <input v-on:click="postnew" class="submit" type="submit" name="" value="Submit">
     </div>
     <input class="search" type="text" v-model="keyword" placeholder="Search Companies"/>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th v-on:click="comtoggle" v-model="com">Company<span v-if="comup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
-              <th>Industry</th>
-              <th>Year</th>
-              <th v-on:click="revtoggle" v-model="rev">Revenue<span v-if="revup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="company in filteredList">
-              <td>{{ company.name }}</td>
-              <td>{{ company.industry }}</td>
-              <td>{{ company.year }}</td>
-              <td>{{ company.revenue }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="container-fluid">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th v-on:click="comtoggle" v-model="com">Company<span v-if="comup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
+            <th>Industry</th>
+            <th>Year</th>
+            <th v-on:click="revtoggle" v-model="rev">Revenue<span v-if="revup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="company in filteredList">
+            <td>{{ company.name }}</td>
+            <td>{{ company.industry }}</td>
+            <td>{{ company.year }}</td>
+            <td>{{ company.revenue }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -91,7 +94,9 @@
         }
       },
       postnew: function () {
-        console.log(this.comname, this.revenue)
+        this.$http.post('http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323', {comname: this.comname, year: this.year, revenue: this.revenue, industry: this.industry}, function (response) {
+          alert(response)
+        })
       }
     },
     created: function () {
@@ -99,16 +104,15 @@
         .then(function (response) {
           this.companies = response.body.companies
         })
-      // this.$http.post('http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323')
-      //   .then(function (response) {
-      //     console.log(response)
-      //   })
     },
     computed: {
       filteredList () {
         return this.companies.filter((company) => {
           return company.name.toLowerCase().includes(this.keyword.toLowerCase())
         })
+      },
+      industryRevenue () {
+        console.log(this.companies)
       }
     }
   }
@@ -139,8 +143,21 @@
 
   .submit {
     border: solid 1px;
-    border-radius: 10%;
+    border-radius: 5px;
     border-color: lightgray;
+  }
+
+  input {
+    border: solid 1px;
+    border-radius: 5px;
+    border-color: lightgray;
+  }
+  .container-fluid {
+    max-width: 80%;
+  }
+
+  td {
+    text-align: left;
   }
 
 </style>
