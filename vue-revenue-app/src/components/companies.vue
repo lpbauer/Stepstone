@@ -2,16 +2,14 @@
   <div class="companies">
     <div class="container-fluid">
       <h1>Company Revenue by Industry</h1>
-      <p>Add New Information</p>
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
+          <p>Add New Information</p>
           <label for="company">Company Name</label>
           <select  v-model="comname">
             <option v-for="company in companies">
               {{ company.name }}</option>
             </select>
-          </div>
-          <div class="col-sm-2">
             <label for="industry">Industry</label>
             <select v-model="industry">
               <option>Aerospace</option>
@@ -22,18 +20,21 @@
               <option>Oil & Gas</option>
               <option>Technology</option>
             </select>
-          </div>
-          <div class="col-sm-2">
             <label for="year">Year</label>
             <input class="input-width" type="text" v-model="year">
-          </div>
-          <div class="col-sm-2">
             <label for="revenue">Revenue</label>
             <input class="input-width" type="text" v-model="revenue">
-          </div>
-          <div class="col-sm-2">
-            <label for="submit"></label>
             <input v-on:click="postnew" class="submit" type="submit" value="Submit">
+          </div>
+          <div class="col-sm-6 graph">
+            <p>Total Revenue by Industry</p>
+            <div class="aero-bar"><strong>Aerospace:</strong> {{ totalRevenueObject.aerorev }}</div>
+            <div class="bank-bar"><strong>Banks, Commercial:</strong> {{ totalRevenueObject.bankrev }}</div>
+            <div class="ed-bar"><strong>Education:</strong> {{ totalRevenueObject.edrev }}</div>
+            <div class="health-bar"><strong>Healthcare:</strong> {{ totalRevenueObject.healthrev }}</div>
+            <div class="man-bar"><strong>Manufacturing:</strong> {{ totalRevenueObject.manrev }}</div>
+            <div class="oil-bar"><strong>Oil & Gas:</strong> {{ totalRevenueObject.oilrev }}</div>
+            <div class="tech-bar"><strong>Technology:</strong> {{ totalRevenueObject.techrev }}</div>
           </div>
         </div>
       </div>
@@ -72,20 +73,12 @@
         year: '',
         industry: '',
         revenue: '',
-        areorev: '',
-        edrev: '',
-        techrev: '',
-        bankrev: '',
-        healthrev: '',
-        manrev: '',
-        oilrev: '',
         rev: true,
         com: true,
         comup: true,
         revup: true,
         companies: [],
-        totalRevenueObject: {},
-        revObject: {}
+        totalRevenueObject: {}
       }
     },
     methods: {
@@ -161,17 +154,15 @@
             techrev += (parseFloat((all[i].revenue).replace(',', '')))
           }
         }
-        var revObject = {aerorev, bankrev, edrev, healthrev, manrev, oilrev, techrev}
-        console.log(revObject)
+        var revObject = {aerorev: aerorev.toFixed(2), bankrev: bankrev.toFixed(2), edrev: edrev.toFixed(2), healthrev: healthrev.toFixed(2), manrev: manrev.toFixed(2), oilrev: oilrev.toFixed(2), techrev: techrev.toFixed(2)}
         return revObject
-        // console.log('aerorev = ' + aerorev + ' Banks = ' + bankrev + ' Ed = ' + edrev + ' Health = ' + healthrev + ' Man = ' + manrev + ' Oil = ' + oilrev + ' Tech = ' + techrev)
       }
     },
     created: function () {
       this.$http.get('http://jsapi.makespi.com/api/companies/revenue?key=' + (process.env.API_KEY))
       .then(function (response) {
-        this.totalRevenueObject = this.industryRevenue()
         this.companies = response.body.companies
+        this.totalRevenueObject = this.industryRevenue()
       })
     },
     computed: {
@@ -185,6 +176,10 @@
   </script>
 
   <style scoped>
+
+  h1 {
+    margin-bottom: 5%;
+  }
 
   .arrow-asc {
     margin-left: 5%;
@@ -210,7 +205,8 @@
   }
 
   .submit {
-    margin-top: 15%;
+    margin-top: 5%;
+    margin-left: 70%;
     border: solid 1px;
     border-radius: 5px;
     border-color: lightgray;
@@ -230,13 +226,77 @@
     text-align: left;
   }
 
+  label {
+    margin-top: 2%;
+  }
+
   label, select {
-    display: block;
+    width: 90%;
   }
 
   .input-width {
-    width: 99%;
+    width: 90%;
     height: 25px;
+  }
+
+  .aero-bar {
+    writing-mode: tb-rl;
+    display: inline-block;
+    width: 12%;
+    background-color: lightgray;
+    height: calc((5194052.34/15000000)*60%);
+  }
+
+  .bank-bar {
+    writing-mode: tb-rl;
+    display: inline-block;
+    width: 12%;
+    background-color: lightgray;
+    height: calc((12247517.32/15000000)*60%);
+  }
+
+  .ed-bar {
+    writing-mode: tb-rl;
+    display: inline-block;
+    width: 12%;
+    background-color: lightgray;
+    height: calc((4701801.02/15000000)*60%);
+  }
+
+  .health-bar {
+    writing-mode: tb-rl;
+    display: inline-block;
+    width: 12%;
+    background-color: lightgray;
+    height: calc((4967215.89/15000000)*60%);
+  }
+
+  .man-bar {
+    writing-mode: tb-rl;
+    display: inline-block;
+    width: 12%;
+    background-color: lightgray;
+    height: calc((4909931.72/15000000)*60%);
+  }
+
+  .oil-bar {
+    writing-mode: tb-rl;
+    display: inline-block;
+    width: 12%;
+    background-color: lightgray;
+    height: calc((5122360.35/15000000)*60%);
+  }
+
+  .tech-bar {
+    writing-mode: tb-rl;
+    display: inline-block;
+    width: 12%;
+    background-color: lightgray;
+    height: calc((13444863.48/15000000)*60%);
+  }
+
+  .graph {
+
   }
 
   </style>
