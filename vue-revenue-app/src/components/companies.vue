@@ -25,11 +25,11 @@
           </div>
           <div class="col-sm-2">
             <label for="year">Year</label>
-            <input type="text" v-model="year">
+            <input class="input-width" type="text" v-model="year">
           </div>
           <div class="col-sm-2">
             <label for="revenue">Revenue</label>
-            <input type="text" v-model="year">
+            <input class="input-width" type="text" v-model="revenue">
           </div>
           <div class="col-sm-2">
             <label for="submit"></label>
@@ -72,18 +72,27 @@
         year: '',
         industry: '',
         revenue: '',
+        areorev: '',
+        edrev: '',
+        techrev: '',
+        bankrev: '',
+        healthrev: '',
+        manrev: '',
+        oilrev: '',
         rev: true,
         com: true,
         comup: true,
         revup: true,
-        companies: []
+        companies: [],
+        totalRevenueObject: {},
+        revObject: {}
       }
     },
     methods: {
       revtoggle: function () {
         var rev = this.rev
         var revup = this.revup
-        var revsort = 'http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323&sort=revenue&sort_order='
+        var revsort = 'http://jsapi.makespi.com/api/companies/revenue?key=' + (process.env.API_KEY) + '&sort=revenue&sort_order='
         if (rev) {
           this.revup = !revup
           this.rev = !rev
@@ -103,7 +112,7 @@
       comtoggle: function () {
         var comup = this.comup
         var com = this.com
-        var comsort = 'http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323&sort=companies&sort_order='
+        var comsort = 'http://jsapi.makespi.com/api/companies/revenue?key=' + (process.env.API_KEY) + '=companies&sort_order='
         if (com) {
           this.comup = !comup
           this.com = !com
@@ -121,14 +130,47 @@
         }
       },
       postnew: function () {
-        this.$http.post('http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323', {company: this.comname, year: this.year, revenue: this.revenue, industry: this.industry}, function (response) {
+        this.$http.post('http://jsapi.makespi.com/api/companies/revenue?key=' + (process.env.API_KEY), {company: this.comname, year: this.year, revenue: this.revenue, industry: this.industry})
+        .then(function (response) {
           alert(response)
         })
+      },
+      industryRevenue () {
+        var all = this.companies
+        var bankrev = 0
+        var techrev = 0
+        var aerorev = 0
+        var healthrev = 0
+        var edrev = 0
+        var manrev = 0
+        var oilrev = 0
+        for (var i = 0; i < all.length; i++) {
+          if (all[i].industry === 'Aerospace') {
+            aerorev += (parseFloat((all[i].revenue).replace(',', '')))
+          } else if (all[i].industry === 'Banks, Commercial') {
+            bankrev += (parseFloat((all[i].revenue).replace(',', '')))
+          } else if (all[i].industry === 'Education') {
+            edrev += (parseFloat((all[i].revenue).replace(',', '')))
+          } else if (all[i].industry === 'Health Care') {
+            healthrev += (parseFloat((all[i].revenue).replace(',', '')))
+          } else if (all[i].industry === 'Manufacturing') {
+            manrev += (parseFloat((all[i].revenue).replace(',', '')))
+          } else if (all[i].industry === 'Oil & Gas') {
+            oilrev += (parseFloat((all[i].revenue).replace(',', '')))
+          } else if (all[i].industry === 'Technology') {
+            techrev += (parseFloat((all[i].revenue).replace(',', '')))
+          }
+        }
+        var revObject = {aerorev, bankrev, edrev, healthrev, manrev, oilrev, techrev}
+        console.log(revObject)
+        return revObject
+        // console.log('aerorev = ' + aerorev + ' Banks = ' + bankrev + ' Ed = ' + edrev + ' Health = ' + healthrev + ' Man = ' + manrev + ' Oil = ' + oilrev + ' Tech = ' + techrev)
       }
     },
     created: function () {
-      this.$http.get('http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323')
+      this.$http.get('http://jsapi.makespi.com/api/companies/revenue?key=' + (process.env.API_KEY))
       .then(function (response) {
+        this.totalRevenueObject = this.industryRevenue()
         this.companies = response.body.companies
       })
     },
@@ -137,9 +179,6 @@
         return this.companies.filter((company) => {
           return company.name.toLowerCase().includes(this.keyword.toLowerCase())
         })
-      },
-      industryRevenue () {
-        console.log(this.companies)
       }
     }
   }
@@ -153,6 +192,7 @@
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-bottom: 6px solid black;
+    cursor: pointer;
   }
 
   .arrow-dsc {
@@ -161,6 +201,7 @@
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
     border-top: 6px solid black;
+    cursor: pointer;
   }
 
   .search {
@@ -191,6 +232,11 @@
 
   label, select {
     display: block;
+  }
+
+  .input-width {
+    width: 99%;
+    height: 25px;
   }
 
   </style>
