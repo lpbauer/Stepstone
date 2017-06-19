@@ -6,14 +6,14 @@
       <div class="row">
         <div class="col-sm-4">
           <label for="company">Company Name</label>
-          <select>
+          <select  v-model="comname">
             <option v-for="company in companies">
               {{ company.name }}</option>
             </select>
           </div>
           <div class="col-sm-2">
             <label for="industry">Industry</label>
-            <select>
+            <select v-model="industry">
               <option>Aerospace</option>
               <option>Banks, Commercial</option>
               <option>Education</option>
@@ -25,11 +25,11 @@
           </div>
           <div class="col-sm-2">
             <label for="year">Year</label>
-            <input type="text">
+            <input type="text" v-model="year">
           </div>
           <div class="col-sm-2">
             <label for="revenue">Revenue</label>
-            <input type="text">
+            <input type="text" v-model="year">
           </div>
           <div class="col-sm-2">
             <label for="submit"></label>
