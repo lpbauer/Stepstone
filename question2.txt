@@ -1,0 +1,3 @@
+2. What is Prototypal inheritance? What are some of its Pros and Cons?
+
+Prototypal inheritance is when objects inherit properties from other objects.  Pros: Simplicity.  Essentially there are two pieces of Prototypal inheritance: creating new objects and extending existing objects.  This is especially striking when comparing it to Classical inheritance which has many more pieces.  Prototypal inheritance also gives the programmer the option of which properties to inherit from another object.  This is generally not the case with classical inheritance.  Cons: Type checking is made much more challenging in Prototypal inheritance.  Additionally, object creation is often slower in Prototypal inheritance than in Classical inheritance.

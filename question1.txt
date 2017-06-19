@@ -14,4 +14,4 @@ var a = b = "bar" as:
 rather than, maybe intuitively:
   var a = b; // undefined
   var b = "bar";
-Given this reality, b becomes a global variable without the var designation as at the top declaration of b and therefore overrides the "foo" with "bar" as the output.
+Given this reality, b becomes a global variable without the var designation as is the case at the top declaration of b and therefore overrides the "foo" with "bar" as the output.
