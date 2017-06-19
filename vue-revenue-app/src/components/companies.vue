@@ -1,41 +1,68 @@
 <template>
   <div class="companies">
-    <h1>Company Revenue by Industry</h1>
-    <p>Add New Information</p>
-    <div class="add-company">
-      <select><option v-model="comname" v-for="company in companies">{{ company.name }}</option>
-      </select>
-      <input type="text" v-model="industry" placeholder="Industry">
-      <input type="text" v-model="year" placeholder="Year">
-      <input type="text" v-model="revenue" placeholder="Revenue">
-      <input v-on:click="postnew" class="submit" type="submit" name="" value="Submit">
-    </div>
-    <input class="search" type="text" v-model="keyword" placeholder="Search Companies"/>
     <div class="container-fluid">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th v-on:click="comtoggle" v-model="com">Company<span v-if="comup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
-            <th>Industry</th>
-            <th>Year</th>
-            <th v-on:click="revtoggle" v-model="rev">Revenue<span v-if="revup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="company in filteredList">
-            <td>{{ company.name }}</td>
-            <td>{{ company.industry }}</td>
-            <td>{{ company.year }}</td>
-            <td>{{ company.revenue }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <h1>Company Revenue by Industry</h1>
+      <p>Add New Information</p>
+      <div class="row">
+        <div class="col-sm-4">
+          <label for="company">Company Name</label>
+          <select>
+            <option v-for="company in companies">
+              {{ company.name }}</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <label for="industry">Industry</label>
+            <select>
+              <option>Aerospace</option>
+              <option>Banks, Commercial</option>
+              <option>Education</option>
+              <option>Healthcare</option>
+              <option>Manufacturing</option>
+              <option>Oil & Gas</option>
+              <option>Technology</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <label for="year">Year</label>
+            <input type="text">
+          </div>
+          <div class="col-sm-2">
+            <label for="revenue">Revenue</label>
+            <input type="text">
+          </div>
+          <div class="col-sm-2">
+            <label for="submit"></label>
+            <input v-on:click="postnew" class="submit" type="submit" value="Submit">
+          </div>
+        </div>
+      </div>
+      <input class="search" type="text" v-model="keyword" placeholder="Search Companies"/>
+      <div class="container-fluid">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th v-on:click="comtoggle" v-model="com">Company<span v-if="comup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
+              <th>Industry</th>
+              <th>Year</th>
+              <th v-on:click="revtoggle" v-model="rev">Revenue<span v-if="revup" class="arrow-asc"></span><span v-else class="arrow-dsc"></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="company in filteredList">
+              <td>{{ company.name }}</td>
+              <td>{{ company.industry }}</td>
+              <td>{{ company.year }}</td>
+              <td>{{ company.revenue }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-</template>
+  </template>
 
 
-<script>
+  <script>
   export default {
     name: 'companies',
     data () {
@@ -94,16 +121,16 @@
         }
       },
       postnew: function () {
-        this.$http.post('http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323', {comname: this.comname, year: this.year, revenue: this.revenue, industry: this.industry}, function (response) {
+        this.$http.post('http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323', {company: this.comname, year: this.year, revenue: this.revenue, industry: this.industry}, function (response) {
           alert(response)
         })
       }
     },
     created: function () {
       this.$http.get('http://jsapi.makespi.com/api/companies/revenue?key=508bce9c8cf114ded87959c536fd2323')
-        .then(function (response) {
-          this.companies = response.body.companies
-        })
+      .then(function (response) {
+        this.companies = response.body.companies
+      })
     },
     computed: {
       filteredList () {
@@ -116,9 +143,9 @@
       }
     }
   }
-</script>
+  </script>
 
-<style scoped>
+  <style scoped>
 
   .arrow-asc {
     margin-left: 5%;
@@ -142,6 +169,7 @@
   }
 
   .submit {
+    margin-top: 15%;
     border: solid 1px;
     border-radius: 5px;
     border-color: lightgray;
@@ -152,12 +180,17 @@
     border-radius: 5px;
     border-color: lightgray;
   }
+
   .container-fluid {
     max-width: 80%;
   }
 
-  td {
+  td, label {
     text-align: left;
   }
 
-</style>
+  label, select {
+    display: block;
+  }
+
+  </style>
